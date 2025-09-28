@@ -48,6 +48,7 @@ pols_cleaned = pols_df |>
 pols_cleaned
 ```
 
+The pols-month.csv dataset contained monthly political control data, including presidential party affiliation (prez_gop/prez_dem) and the distribution of governorships and congressional seats, starting from 1947. 
 
 ## Clean data in snp
 
@@ -79,6 +80,7 @@ snp_cleaned = snp_df |>
 snp_cleaned
 ```
 
+The snp.csv file provided the monthly closing value of the S&P 500 index, tracking market performance across the period. 
 
 ## Clean data in unemployment
 
@@ -111,6 +113,8 @@ arrange(year, month)
 unemployment_cleaned
 ```
 
+The unemployment.csv dataset held the U.S. unemployment rate, originally in a wide format with each month as a separate column. After cleaning and merging, the resulting dataset has 816 observations and 3 variables.
+
 ## Join the data
 
 ```{r}
@@ -121,8 +125,8 @@ merged_df = pols_cleaned |>
 merged_df
 ```
 
-
-
+This project merged three datasets provided by FiveThirtyEight.
+The resulting tidy dataset, created by merging the three files using left_join, has 822 observations and 11 variables. The data spans the years from 1947 to 2015. Key variables include year, month, president (gop or dem), snp_value, and unemployment_rate.
 
 
 
