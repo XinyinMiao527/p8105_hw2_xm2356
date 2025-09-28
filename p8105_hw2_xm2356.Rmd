@@ -25,18 +25,8 @@ pols_df = read_csv("data/fivethirtyeight_datasets/pols-month.csv")
 pols_cleaned = pols_df |> 
   separate(mon, into = c("year", "month", "day"), sep = "-", convert = TRUE) |> 
   mutate(
-    year = as.integer(year),
-    month = as.integer(month),
-    day = as.integer(day),
-
-    month = case_when(
-      month == 1 ~ "January", month == 2 ~ "February", month == 3 ~ "March",
-      month == 4 ~ "April", month == 5 ~ "May", month == 6 ~ "June",
-      month == 7 ~ "July", month == 8 ~ "August", month == 9 ~ "September",
-      month == 10 ~ "October", month == 11 ~ "November", month == 12 ~ "December",
-      TRUE ~ as.character(month)
-    ),
-    president = case_when(
+      month = month.name[month],
+      president = case_when(
       prez_dem == 1 ~ "dem",
       prez_gop == 1 ~ "gop",
       TRUE ~ NA_character_
@@ -65,13 +55,7 @@ snp_cleaned = snp_df |>
       year_short <= 49 ~ year_short + 2000,
       year_short >= 50 ~ year_short + 1900,
     ),
-    month = case_when(
-      month_num == 1 ~ "January", month_num == 2 ~ "February", month_num == 3 ~ "March",
-      month_num == 4 ~ "April", month_num == 5 ~ "May", month_num == 6 ~ "June",
-      month_num == 7 ~ "July", month_num == 8 ~ "August", month_num == 9 ~ "September",
-      month_num == 10 ~ "October", month_num == 11 ~ "November", month_num == 12 ~ "December",
-      TRUE ~ NA_character_
-      )
+    month = month.name[month_num]
   )  |>  
   select(year, month, snp_value = close) |> 
     # arrange by year and month
@@ -97,15 +81,7 @@ unemployment_cleaned = unemployment_df |>
     values_to = "unemployment_rate"
   ) |> 
 mutate(
-    month = case_when(
-      month_abbr == "Jan" ~ "January", month_abbr == "Feb" ~ "February",
-      month_abbr == "Mar" ~ "March", month_abbr == "Apr" ~ "April",
-      month_abbr == "May" ~ "May", month_abbr == "Jun" ~ "June",
-      month_abbr == "Jul" ~ "July", month_abbr == "Aug" ~ "August",
-      month_abbr == "Sep" ~ "September", month_abbr == "Oct" ~ "October",
-      month_abbr == "Nov" ~ "November", month_abbr == "Dec" ~ "December",
-      TRUE ~ NA_character_
-    )
+    month = month.name[match(month_abbr, month.abb)]
 ) |> 
 select(year, month, unemployment_rate) |> 
 arrange(year, month)
@@ -113,7 +89,7 @@ arrange(year, month)
 unemployment_cleaned
 ```
 
-The unemployment.csv dataset held the U.S. unemployment rate, originally in a wide format with each month as a separate column. After cleaning and merging, the resulting dataset has 816 observations and 3 variables.
+The unemployment.csv dataset held the U.S. unemployment rate, originally in a wide format with each month as a separate column.
 
 ## Join the data
 
@@ -181,40 +157,30 @@ gwynnda_df <- read_excel(
 
 trash_wheel_df <- bind_rows(mr_trash_df, prof_trash_df, gwynnda_df)
 
-n_obs <- nrow(trash_wheel_df)
-
-
 ```
 
-## The total weight of trash collected by Professor Trash Wheel
-```{r}
-prof_total_weight <- trash_wheel_df |> 
-  filter(wheel == "Professor Trash Wheel") |> 
-  summarise(total = sum(weight_tons, na.rm = TRUE)) |> 
-  pull(total)
-```
+## The total weight of trash and the number of cigarette
 
-## The total number of cigarette butts collected by Gwynnda in June of 2022
 ```{r}
-gwynnda_cigs_june2022 <- trash_wheel_df |> 
-  filter(wheel == "Gwynnda Trash Wheel",
-         year == 2022, month(date) == 6) |> 
-  summarise(total = sum(cigarette_butts, na.rm = TRUE)) |> 
-  pull(total)
+trash_summary <- list(
+  n_obs = nrow(trash_wheel_df),
+  
+  prof_total_weight = trash_wheel_df |> 
+    filter(wheel == "Professor Trash Wheel") |> 
+    summarise(total = sum(weight_tons, na.rm = TRUE)) |> 
+    pull(total),
+    
+  gwynnda_cigs_june2022 = trash_wheel_df |> 
+    filter(wheel == "Gwynnda Trash Wheel", 
+           year == 2022, month(date) == 6) |> 
+    summarise(total = sum(cigarette_butts, na.rm = TRUE)) |> 
+    pull(total)
+)
 ```
 
 ## Paragraph about these data
-```{r}
-glue::glue("
-The combined Trash Wheel dataset contains {n_obs} observations from three 
-sources: Mr. Trash Wheel, Professor Trash Wheel, and Gwynnda. 
-Key variables include date of collection, weight in tons, volume in cubic yards, 
-and counts of items such as plastic bottles, cigarette butts, and sports balls. 
-For example, Professor Trash Wheel has collected a total of {prof_total_weight} tons of trash, 
-while Gwynnda collected {gwynnda_cigs_june2022} cigarette butts in June 2022.
-")
 
-```
+The combined Trash Wheel dataset contains `r trash_summary$n_obs` observations from three sources: Mr. Trash Wheel, Professor Trash Wheel, and Gwynnda. Key variables include date of collection, weight in tons, volume in cubic yards, and counts of items such as plastic bottles, cigarette butts, and sports balls. For example, Professor Trash Wheel has collected a total of `r round(trash_summary$prof_total_weight, 2)` tons of trash, while Gwynnda collected `r trash_summary$gwynnda_cigs_june2022` cigarette butts in June 2022.
 
 
 # Problem 3
@@ -312,7 +278,7 @@ drop_table <- zillow_df |>
   mutate(drop = `zori_2020-01-31` - `zori_2021-01-31`) |> 
   arrange(desc(drop)) |> 
   slice(1:10)
-drop_table
+
 ```
 
 Rental prices fluctuated dramatically during the COVID-19 pandemic.
