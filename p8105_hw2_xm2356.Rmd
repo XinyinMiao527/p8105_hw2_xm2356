@@ -80,8 +80,20 @@ unemployment_cleaned = unemployment_df |>
     cols = Jan:Dec,
     names_to = "month_abbr",
     values_to = "unemployment_rate"
-  ) 
-
+  ) |> 
+mutate(
+    month = case_when(
+      month_abbr == "Jan" ~ "January", month_abbr == "Feb" ~ "February",
+      month_abbr == "Mar" ~ "March", month_abbr == "Apr" ~ "April",
+      month_abbr == "May" ~ "May", month_abbr == "Jun" ~ "June",
+      month_abbr == "Jul" ~ "July", month_abbr == "Aug" ~ "August",
+      month_abbr == "Sep" ~ "September", month_abbr == "Oct" ~ "October",
+      month_abbr == "Nov" ~ "November", month_abbr == "Dec" ~ "December",
+      TRUE ~ NA_character_
+    )
+) |> 
+select(year, month, unemployment_rate) |> 
+arrange(year, month)
 ```
 
 
