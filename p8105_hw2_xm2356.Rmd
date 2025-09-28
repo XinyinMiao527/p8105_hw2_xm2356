@@ -181,23 +181,30 @@ gwynnda_df <- read_excel(
 
 trash_wheel_df <- bind_rows(mr_trash_df, prof_trash_df, gwynnda_df)
 
-
 n_obs <- nrow(trash_wheel_df)
 
-# the total weight of trash collected by Professor Trash Wheel
+
+```
+
+## The total weight of trash collected by Professor Trash Wheel
+```{r}
 prof_total_weight <- trash_wheel_df |> 
   filter(wheel == "Professor Trash Wheel") |> 
   summarise(total = sum(weight_tons, na.rm = TRUE)) |> 
   pull(total)
+```
 
-# the total number of cigarette butts collected by Gwynnda in June of 2022
+## The total number of cigarette butts collected by Gwynnda in June of 2022
+```{r}
 gwynnda_cigs_june2022 <- trash_wheel_df |> 
   filter(wheel == "Gwynnda Trash Wheel",
          year == 2022, month(date) == 6) |> 
   summarise(total = sum(cigarette_butts, na.rm = TRUE)) |> 
   pull(total)
+```
 
-#paragraph about these data
+## Paragraph about these data
+```{r}
 glue::glue("
 The combined Trash Wheel dataset contains {n_obs} observations from three 
 sources: Mr. Trash Wheel, Professor Trash Wheel, and Gwynnda. 
@@ -210,6 +217,7 @@ while Gwynnda collected {gwynnda_cigs_june2022} cigarette butts in June 2022.
 ```
 
 
+# Problem 3
 
 
 
