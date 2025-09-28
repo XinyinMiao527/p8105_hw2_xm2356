@@ -123,6 +123,13 @@ merged_df = pols_cleaned |>
   left_join(unemployment_cleaned, by = c("year", "month"))
 
 merged_df
+final_dim = dim(merged_df)
+final_years = range(merged_df$year)
+final_names = names(merged_df)
+
+final_dim
+final_years
+final_names
 ```
 
 This project merged three datasets provided by FiveThirtyEight.
