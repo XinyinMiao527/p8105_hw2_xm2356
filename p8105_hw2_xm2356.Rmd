@@ -45,6 +45,7 @@ pols_cleaned = pols_df |>
   select(-prez_dem, -prez_gop, -day) |> 
   select (year, month, president, everything())
   
+pols_cleaned
 ```
 
 
@@ -74,6 +75,8 @@ snp_cleaned = snp_df |>
   select(year, month, snp_value = close) |> 
     # arrange by year and month
   arrange(year, month)
+
+snp_cleaned
 ```
 
 
@@ -104,8 +107,19 @@ mutate(
 ) |> 
 select(year, month, unemployment_rate) |> 
 arrange(year, month)
+
+unemployment_cleaned
 ```
 
+## Join the data
+
+```{r}
+merged_df = pols_cleaned |> 
+  left_join(snp_cleaned, by = c("year", "month")) |> 
+  left_join(unemployment_cleaned, by = c("year", "month"))
+
+merged_df
+```
 
 
 
