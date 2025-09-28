@@ -179,9 +179,33 @@ gwynnda_df <- read_excel(
     wheel = "Gwynnda Trash Wheel"
   )
 
-
 trash_wheel_df <- bind_rows(mr_trash_df, prof_trash_df, gwynnda_df)
 
+
+n_obs <- nrow(trash_wheel_df)
+
+# the total weight of trash collected by Professor Trash Wheel
+prof_total_weight <- trash_wheel_df |> 
+  filter(wheel == "Professor Trash Wheel") |> 
+  summarise(total = sum(weight_tons, na.rm = TRUE)) |> 
+  pull(total)
+
+# the total number of cigarette butts collected by Gwynnda in June of 2022
+gwynnda_cigs_june2022 <- trash_wheel_df |> 
+  filter(wheel == "Gwynnda Trash Wheel",
+         year == 2022, month(date) == 6) |> 
+  summarise(total = sum(cigarette_butts, na.rm = TRUE)) |> 
+  pull(total)
+
+#paragraph about these data
+glue::glue("
+The combined Trash Wheel dataset contains {n_obs} observations from three 
+sources: Mr. Trash Wheel, Professor Trash Wheel, and Gwynnda. 
+Key variables include date of collection, weight in tons, volume in cubic yards, 
+and counts of items such as plastic bottles, cigarette butts, and sports balls. 
+For example, Professor Trash Wheel has collected a total of {prof_total_weight} tons of trash, 
+while Gwynnda collected {gwynnda_cigs_june2022} cigarette butts in June 2022.
+")
 
 ```
 
