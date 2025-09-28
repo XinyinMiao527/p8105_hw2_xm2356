@@ -16,6 +16,7 @@ library(knitr)
 # Problem 1
 
 ## Clean data in pols-month
+
 ```{r}
 ## load data
 pols_df = read_csv("data/fivethirtyeight_datasets/pols-month.csv")
@@ -40,4 +41,47 @@ pols_cleaned = pols_df |>
   select (year, month, president, starts_with("poll_"), starts_with("approval_"))
   
 ```
+
+
+## Clean data in snp
+
+```{r}
+## load data
+snp_df = read_csv("data/fivethirtyeight_datasets/snp.csv")
+
+## clean data
+snp_cleaned = snp_df |> 
+  separate(date, into = c("year", "month", "day"), sep = "/", convert = TRUE) |> 
+  # arrange by year and month
+  arrange(year, month) |> 
+  select(year, month, snp_value = close, -day) |> 
+  mutate(
+    month = case_when(
+      month == 1 ~ "January", month == 2 ~ "February", month == 3 ~ "March",
+      month == 4 ~ "April", month == 5 ~ "May", month == 6 ~ "June",
+      month == 7 ~ "July", month == 8 ~ "August", month == 9 ~ "September",
+      month == 10 ~ "October", month == 11 ~ "November", month == 12 ~ "December",
+      TRUE ~ as.character(month)
+      )
+  )   
+```
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
