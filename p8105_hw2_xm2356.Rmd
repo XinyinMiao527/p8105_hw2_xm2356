@@ -74,6 +74,13 @@ snp_cleaned = snp_df |>
 unemployment_df = read_csv("data/fivethirtyeight_datasets/unemployment.csv")
 
 ## tidy data
+unemployment_cleaned = unemployment_df |> 
+  rename(year = Year) |> 
+  pivot_longer(
+    cols = Jan:Dec,
+    names_to = "month_abbr",
+    values_to = "unemployment_rate"
+  ) 
 
 ```
 
