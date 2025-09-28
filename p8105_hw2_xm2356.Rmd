@@ -67,6 +67,15 @@ snp_cleaned = snp_df |>
 ```
 
 
+## Clean data in unemployment
+
+```{r}
+## load data
+unemployment_df = read_csv("data/fivethirtyeight_datasets/unemployment.csv")
+
+## tidy data
+
+```
 
 
 
