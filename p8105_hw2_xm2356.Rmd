@@ -252,7 +252,7 @@ zillow_df <- zori_df |>
 
 ```
 
-
+## Description of the data
 ```{r}
 
 n_obs <- nrow(zillow_df)
@@ -261,9 +261,25 @@ n_zip <- n_distinct(zillow_df$RegionName)
 
 n_neighborhood <- n_distinct(zillow_df$neighborhood)
 
+list(
+  total_observations = n_obs,
+  unique_zipcodes = n_zip,
+  unique_neighborhoods = n_neighborhood
+)
+
+
+```
+
+## Missing zip codes
+```{r}
 missing_zips <- setdiff(zip_df$zip_code, unique(zori_df$RegionName))
 
 
+```
+
+## Rental price
+
+```{r}
 drop_table <- zillow_df |> 
   filter(month %in% c(ymd("2020-01-31"), ymd("2021-01-31"))) |> 
   select(RegionName, county, neighborhood, month, zori) |> 
@@ -272,12 +288,7 @@ drop_table <- zillow_df |>
   mutate(drop = `zori_2021-01-31` - `zori_2020-01-31`) |> 
   arrange(drop) |> 
   slice(1:10)
-
-
 ```
-
-
-
 
 
 
