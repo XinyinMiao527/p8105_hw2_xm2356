@@ -283,6 +283,24 @@ missing_zips <- setdiff(zip_df$zip_code, unique(zori_df$RegionName))
 
 ```
 
+There are `r length(missing_zips)` ZIP codes found in the NYC geographical dataset that are excluded from the Zillow Rental Price index. The first few illustrative examples are shown below:
+
+```{r}
+zip_df |>
+  filter(zip_code %in% missing_zips) |>
+  select(zip_code, county, neighborhood) |>
+  head(5) |>
+  knitr::kable(caption = "First 5 ZIP Codes Missing from Zillow Data")
+```
+
+The exclusion of these ZIP codes from the Zillow Observed Rent Index (ZORI) is often due to data limitations or the nature of the area. Possible reasons include:
+
+1. Low Transaction Volume: Zillow requires a minimum number of recent rental listings to generate a reliable index value. ZIP codes with very low housing density or few market rentals (e.g., predominantly commercial or industrial zones) are often excluded.
+
+2. Institutional/Specialized Areas: Some ZIP codes might cover large tracts of public housing, parks, institutional campuses, or large commercial areas (like the financial district on weekends), where rental prices are non-market or not publicly tracked by Zillow.
+
+3. Data Quality: The exclusion could also be related to insufficient data quality or completeness in the ZORI source data for those specific regions over the analyzed timeframe.
+
 ## Rental price
 
 ```{r}
@@ -291,8 +309,8 @@ drop_table <- zillow_df |>
   select(RegionName, county, neighborhood, month, zori) |> 
   pivot_wider(names_from = month, values_from = zori, 
               names_prefix = "zori_") |> 
-  mutate(drop = `zori_2021-01-31` - `zori_2020-01-31`) |> 
-  arrange(drop) |> 
+  mutate(drop = `zori_2020-01-31` - `zori_2021-01-31`) |> 
+  arrange(desc(drop)) |> 
   slice(1:10)
 drop_table
 ```
