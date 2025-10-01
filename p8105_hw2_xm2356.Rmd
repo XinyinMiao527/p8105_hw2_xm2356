@@ -1,7 +1,7 @@
 ---
 title: "p8105_hw2_xm2356"
 author: "Xinyin Miao (xm2356)"
-date: "2025-09-27"
+date: "2025-09-30"
 output: github_document
 ---
 
@@ -180,7 +180,7 @@ trash_summary <- list(
 
 ## Paragraph about these data
 
-The combined Trash Wheel dataset contains `r trash_summary$n_obs` observations from three sources: Mr. Trash Wheel, Professor Trash Wheel, and Gwynnda. Key variables include date of collection, weight in tons, volume in cubic yards, and counts of items such as plastic bottles, cigarette butts, and sports balls. For example, Professor Trash Wheel has collected a total of `r round(trash_summary$prof_total_weight, 2)` tons of trash, while Gwynnda collected `r trash_summary$gwynnda_cigs_june2022` cigarette butts in June 2022.
+The combined Trash Wheel dataset contains `r trash_summary$n_obs` observations from three sources: Mr. Trash Wheel, Professor Trash Wheel, and Gwynns Falls. Key variables include date of collection, weight in tons, volume in cubic yards, and counts of items such as plastic bottles, cigarette butts, and sports balls. For example, Professor Trash Wheel has collected a total of `r round(trash_summary$prof_total_weight, 2)` tons of trash, while Gwynns collected `r trash_summary$gwynnda_cigs_june2022` cigarette butts in June 2022.
 
 
 # Problem 3
