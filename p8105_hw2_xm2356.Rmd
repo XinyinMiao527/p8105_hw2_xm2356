@@ -116,7 +116,7 @@ The resulting tidy dataset, created by merging the three files using left_join, 
 
 
 ```{r}
-trash_file <- "data/202409 Trash Wheel Collection Data.xlsx"
+trash_file <- "data/202509 Trash Wheel Collection Data.xlsx"
 
 mr_trash_df <- read_excel(
   trash_file,
@@ -145,14 +145,14 @@ prof_trash_df <- read_excel(
 
 gwynnda_df <- read_excel(
   trash_file,
-  sheet = "Gwynnda Trash Wheel",
+  sheet = "Gwynns Falls Trash Wheel",
   range = cell_cols("A:L")
 ) |> 
   janitor::clean_names() |> 
   filter(!is.na(dumpster)) |> 
   mutate(
     year = as.numeric(year),     
-    wheel = "Gwynnda Trash Wheel"
+    wheel = "Gwynns Falls Trash Wheel"
   )
 
 trash_wheel_df <- bind_rows(mr_trash_df, prof_trash_df, gwynnda_df)
@@ -171,7 +171,7 @@ trash_summary <- list(
     pull(total),
     
   gwynnda_cigs_june2022 = trash_wheel_df |> 
-    filter(wheel == "Gwynnda Trash Wheel", 
+    filter(wheel == "Gwynns Falls Trash Wheel", 
            year == 2022, month(date) == 6) |> 
     summarise(total = sum(cigarette_butts, na.rm = TRUE)) |> 
     pull(total)
